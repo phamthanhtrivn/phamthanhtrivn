@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { PortfolioIcon } from "./icon";
+import { PortfolioIcon, getTechIconName } from "./icon";
 import type { Project } from "@/lib/portfolio-data";
 
 type CaseStudyDrawerProps = {
@@ -46,7 +46,7 @@ export function CaseStudyDrawer({ project, onClose }: CaseStudyDrawerProps) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
-          className="fixed inset-0 bg-black/40 backdrop-blur-sm"
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm"
         />
 
         {/* Drawer panel */}
@@ -61,10 +61,10 @@ export function CaseStudyDrawer({ project, onClose }: CaseStudyDrawerProps) {
           <div className="flex items-center justify-between border-b border-line px-6 py-5">
             <div>
               <div className="flex items-center gap-2">
-                <span className="rounded-lg bg-accent/10 px-2.5 py-1 text-xs font-semibold text-accent">
+                <span className="rounded-lg bg-accent/10 px-2.5 py-1 text-xs font-bold text-accent">
                   {project.status}
                 </span>
-                <span className="rounded-lg bg-surface-soft border border-line px-2.5 py-1 text-xs font-medium text-muted">
+                <span className="rounded-lg bg-surface-soft border border-line px-2.5 py-1 text-xs font-semibold text-muted">
                   {project.role}
                 </span>
               </div>
@@ -72,7 +72,7 @@ export function CaseStudyDrawer({ project, onClose }: CaseStudyDrawerProps) {
             </div>
             <button
               onClick={onClose}
-              className="rounded-lg p-2 text-muted hover:bg-surface-soft hover:text-foreground transition-colors"
+              className="rounded-lg p-2 text-muted hover:bg-surface-soft hover:text-foreground transition-colors cursor-pointer"
               aria-label="Close panel"
             >
               <PortfolioIcon name="arrow" size={20} className="rotate-45" />
@@ -84,19 +84,19 @@ export function CaseStudyDrawer({ project, onClose }: CaseStudyDrawerProps) {
             <TabButton
               active={activeTab === "overview"}
               onClick={() => setActiveTab("overview")}
-              label="Tổng Quan (Overview)"
+              label="Overview"
               icon="about"
             />
             <TabButton
               active={activeTab === "architecture"}
               onClick={() => setActiveTab("architecture")}
-              label="Kiến Trúc (Architecture)"
+              label="Architecture"
               icon="stack"
             />
             <TabButton
               active={activeTab === "tech"}
               onClick={() => setActiveTab("tech")}
-              label="Công Nghệ (Tech Stack)"
+              label="Technology"
               icon="code"
             />
           </div>
@@ -121,7 +121,7 @@ export function CaseStudyDrawer({ project, onClose }: CaseStudyDrawerProps) {
                 {link.label === "Repository" ? (
                   <PortfolioIcon name="github" size={16} weight="fill" />
                 ) : (
-                  <PortfolioIcon name="arrow" size={16} weight="bold" />
+                  <PortfolioIcon name="globe" size={16} weight="bold" />
                 )}
                 {link.label}
               </a>
@@ -148,7 +148,7 @@ function TabButton({
   return (
     <button
       onClick={onClick}
-      className={`relative flex items-center gap-2 border-b-2 py-4 px-4 text-sm font-semibold transition-colors ${
+      className={`relative flex items-center gap-2 border-b-2 py-4 px-4 text-sm font-semibold transition-colors cursor-pointer ${
         active ? "border-accent text-accent" : "border-transparent text-muted hover:text-foreground"
       }`}
     >
@@ -168,20 +168,20 @@ function OverviewTab({ project }: { project: Project }) {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-xs font-semibold text-accent uppercase tracking-wider mono-label">Tóm tắt giải pháp</h3>
+        <h3 className="text-xs font-semibold text-accent uppercase tracking-wider mono-label">Solution Summary</h3>
         <p className="mt-2 text-base leading-7 text-muted">{project.summary}</p>
       </div>
 
       <div className="rounded-xl border border-line bg-surface-soft p-5">
         <h4 className="text-xs font-semibold text-foreground uppercase tracking-wider mono-label flex items-center gap-2">
           <PortfolioIcon name="shield" size={14} className="text-accent" />
-          Bài toán đặt ra (The Challenge)
+          The Challenge
         </h4>
         <p className="mt-2 text-sm leading-6 text-muted">{project.problem}</p>
       </div>
 
       <div>
-        <h3 className="text-xs font-semibold text-accent uppercase tracking-wider mono-label">Tính năng cốt lõi</h3>
+        <h3 className="text-xs font-semibold text-accent uppercase tracking-wider mono-label">Core Features</h3>
         <ul className="mt-3 space-y-3">
           {project.features.map((feat) => (
             <li key={feat} className="flex items-start gap-3 text-sm leading-6 text-muted">
@@ -199,14 +199,14 @@ function ArchitectureTab({ project }: { project: Project }) {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-xs font-semibold text-accent uppercase tracking-wider mono-label">Sơ đồ thiết kế hệ thống</h3>
+        <h3 className="text-xs font-semibold text-accent uppercase tracking-wider mono-label">System Architecture Diagram</h3>
         <div className="mt-4 rounded-xl border border-line bg-surface-soft p-4 flex items-center justify-center overflow-x-auto">
           {renderArchitectureSVG(project.name)}
         </div>
       </div>
 
       <div>
-        <h3 className="text-xs font-semibold text-accent uppercase tracking-wider mono-label">Điểm nhấn giải pháp</h3>
+        <h3 className="text-xs font-semibold text-accent uppercase tracking-wider mono-label">Architecture Highlights</h3>
         <ul className="mt-3 space-y-3">
           {project.architecture.map((arch) => (
             <li key={arch} className="flex items-start gap-3 text-sm leading-6 text-muted">
@@ -224,13 +224,14 @@ function TechTab({ project }: { project: Project }) {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-xs font-semibold text-accent uppercase tracking-wider mono-label">Công nghệ sử dụng</h3>
+        <h3 className="text-xs font-semibold text-accent uppercase tracking-wider mono-label">Technology Stack</h3>
         <div className="mt-3 flex flex-wrap gap-2">
           {project.stack.map((item) => (
             <span
               key={item}
-              className="rounded-lg border border-line bg-surface px-3 py-1.5 text-sm font-semibold text-muted shadow-sm"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-surface px-3 py-1.5 text-sm font-semibold text-muted shadow-sm"
             >
+              <PortfolioIcon name={getTechIconName(item)} size={14} className="text-accent" />
               {item}
             </span>
           ))}
@@ -240,10 +241,10 @@ function TechTab({ project }: { project: Project }) {
       <div className="rounded-xl border border-line p-5">
         <h4 className="text-sm font-semibold text-foreground flex items-center gap-2">
           <PortfolioIcon name="lightning" size={16} className="text-accent" />
-          Nhận định phát triển
+          Implementation Notes
         </h4>
         <p className="mt-2 text-sm leading-6 text-muted">
-          Dự án được xây dựng tuân thủ nguyên lý Clean Architecture, phân tách rõ ràng giữa Core Business Domain logic và Infra layers. Triển khai CI/CD tự động giúp kiểm soát tốt chất lượng mã nguồn trước khi deploy lên AWS.
+          The project was built adhering to clean software design patterns, isolating domain logic from configuration layers. Fully automated workflows ensure testing runs seamlessly prior to deployment on server environments.
         </p>
       </div>
     </div>
@@ -251,11 +252,9 @@ function TechTab({ project }: { project: Project }) {
 }
 
 function renderArchitectureSVG(projectName: string) {
-  // SVG drawings tailored for each featured project
   if (projectName === "Alpha Cinema") {
     return (
       <svg width="500" height="340" viewBox="0 0 500 340" fill="none" xmlns="http://www.w3.org/2000/svg" className="max-w-full">
-        {/* Markers */}
         <defs>
           <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
             <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)" />
@@ -422,11 +421,11 @@ function renderArchitectureSVG(projectName: string) {
     );
   }
 
-  // Fallback icon diagram
+  // Fallback generic diagram
   return (
     <div className="flex flex-col items-center gap-2 py-8 text-muted">
       <PortfolioIcon name="stack" size={48} />
-      <p className="text-sm font-medium">Sơ đồ cấu trúc kỹ thuật</p>
+      <p className="text-sm font-medium">System Design Overview</p>
     </div>
   );
 }

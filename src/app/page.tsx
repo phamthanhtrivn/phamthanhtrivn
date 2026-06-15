@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { PortfolioIcon } from "@/components/icon";
+import { PortfolioIcon, getTechIconName } from "@/components/icon";
 import { Reveal } from "@/components/reveal";
 import { GlowingTracker } from "@/components/glowing-tracker";
 import { CaseStudyDrawer } from "@/components/case-study-drawer";
@@ -14,14 +14,18 @@ import {
   profile,
   projects,
   skillGroups,
+  experience,
+  education,
 } from "@/lib/portfolio-data";
 import type { Project } from "@/lib/portfolio-data";
 
 const navItems = [
-  { label: "Về tôi", href: "#about" },
-  { label: "Dự án", href: "#projects" },
-  { label: "Tư duy hệ thống", href: "#systems" },
-  { label: "Liên hệ", href: "#contact" },
+  { label: "Home", href: "#top" },
+  { label: "About", href: "#about" },
+  { label: "Projects", href: "#projects" },
+  { label: "Tech Stack", href: "#techstack" },
+  { label: "Resume", href: "#resume" },
+  { label: "Contact", href: "#contact" },
 ];
 
 export default function Home() {
@@ -32,10 +36,8 @@ export default function Home() {
   // Filter projects based on tabs
   const filteredProjects = projects.filter((project) => {
     if (activeTab === "all") return true;
-    const lowerName = project.name.toLowerCase();
-    const lowerStack = project.stack.map(s => s.toLowerCase());
     const lowerRole = project.role.toLowerCase();
-    const status = project.status.toLowerCase();
+    const lowerStack = project.stack.map(s => s.toLowerCase());
 
     if (activeTab === "backend") {
       return (
@@ -68,25 +70,22 @@ export default function Home() {
       <Hero />
       <About />
       
-      {/* Skills matrix section */}
-      <Skills />
-
-      {/* Projects with filter tabs */}
+      {/* Projects section */}
       <section id="projects" className="py-24 border-y border-line transition-colors duration-300">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal className="max-w-3xl">
-            <p className="mono-label text-xs font-semibold text-accent uppercase tracking-wider">dự án tiêu biểu</p>
-            <h2 className="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">
-              Các hệ thống phần mềm & Case studies chuyên sâu
+            <p className="mono-label text-xs font-bold text-accent uppercase tracking-wider">featured projects</p>
+            <h2 className="mt-4 text-3xl font-extrabold tracking-tight sm:text-4xl">
+              Production-Grade Systems & Case Studies
             </h2>
             <p className="mt-3 text-muted">
-              Nhấp chọn từng dự án để xem sơ đồ kiến trúc hệ thống, các bài toán thách thức và giải pháp xử lý.
+              Click on any project to explore detailed system architecture diagrams, problem definitions, and solutions.
             </p>
           </Reveal>
 
           {/* Categories Tab Selector */}
           <div className="mt-8 flex flex-wrap gap-2 border-b border-line pb-4">
-            <FilterTab active={activeTab === "all"} onClick={() => setActiveTab("all")} label="Tất cả dự án" />
+            <FilterTab active={activeTab === "all"} onClick={() => setActiveTab("all")} label="All Projects" />
             <FilterTab active={activeTab === "backend"} onClick={() => setActiveTab("backend")} label="Backend / Microservices" />
             <FilterTab active={activeTab === "fullstack"} onClick={() => setActiveTab("fullstack")} label="Full-stack Products" />
             <FilterTab active={activeTab === "mobile"} onClick={() => setActiveTab("mobile")} label="Mobile Apps" />
@@ -101,14 +100,14 @@ export default function Home() {
                 </Reveal>
               ))
             ) : (
-              <p className="text-muted text-sm italic py-4">Không có dự án nào khớp bộ lọc này.</p>
+              <p className="text-muted text-sm italic py-4">No projects match this category filter.</p>
             )}
           </div>
 
           {/* Secondary projects grid */}
           {secondaryProjects.length > 0 && (
             <div className="mt-16">
-              <h3 className="mono-label text-xs font-semibold text-muted uppercase tracking-wider mb-6">Các dự án khác</h3>
+              <h3 className="mono-label text-xs font-semibold text-muted uppercase tracking-wider mb-6">Additional Projects</h3>
               <Reveal>
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                   {secondaryProjects.map((project) => (
@@ -120,6 +119,12 @@ export default function Home() {
           )}
         </div>
       </section>
+
+      {/* Tech Stack section */}
+      <Skills />
+
+      {/* Resume Section */}
+      <Resume />
 
       <Systems />
       <Contact />
@@ -144,7 +149,7 @@ function Header({ onOpenTerminal }: { onOpenTerminal: () => void }) {
           <span className="grid size-9 place-items-center rounded-lg border border-line bg-surface text-sm font-semibold shadow-sm text-accent">
             PT
           </span>
-          <span className="hidden sm:inline tracking-tight">{profile.name}</span>
+          <span className="hidden sm:inline tracking-tight font-extrabold">{profile.name}</span>
         </a>
         
         {/* Navigation list */}
@@ -153,7 +158,7 @@ function Header({ onOpenTerminal }: { onOpenTerminal: () => void }) {
             <a
               key={item.href}
               href={item.href}
-              className="rounded-lg px-3 py-2 text-sm font-medium text-muted transition hover:bg-surface-soft hover:text-foreground"
+              className="rounded-lg px-3 py-2 text-sm font-semibold text-muted transition hover:bg-surface-soft hover:text-foreground"
             >
               {item.label}
             </a>
@@ -165,8 +170,8 @@ function Header({ onOpenTerminal }: { onOpenTerminal: () => void }) {
           {/* CLI Terminal Button */}
           <button
             onClick={onOpenTerminal}
-            className="flex size-10 items-center justify-center rounded-lg border border-line bg-surface text-muted hover:bg-surface-soft hover:text-accent transition-all active:translate-y-px"
-            title="Mở Terminal dòng lệnh CLI"
+            className="flex size-10 items-center justify-center rounded-lg border border-line bg-surface text-muted hover:bg-surface-soft hover:text-accent transition-all active:translate-y-px cursor-pointer"
+            title="Open Interactive CLI Terminal"
             aria-label="Open CLI Terminal"
           >
             <PortfolioIcon name="backend" size={18} weight="bold" />
@@ -175,22 +180,22 @@ function Header({ onOpenTerminal }: { onOpenTerminal: () => void }) {
           {/* Theme switcher */}
           <button
             onClick={toggleTheme}
-            className="flex size-10 items-center justify-center rounded-lg border border-line bg-surface text-muted hover:bg-surface-soft hover:text-accent transition-all active:translate-y-px"
-            title="Chuyển chế độ sáng/tối"
+            className="flex size-10 items-center justify-center rounded-lg border border-line bg-surface text-muted hover:bg-surface-soft hover:text-accent transition-all active:translate-y-px cursor-pointer"
+            title="Toggle Light/Dark Theme"
             aria-label="Toggle theme mode"
           >
             <PortfolioIcon name={theme === "light" ? "moon" : "sun"} size={18} weight="bold" />
           </button>
 
-          {/* GitHub link */}
+          {/* Connect actions */}
           <a
             href={profile.github}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex h-10 items-center gap-2 rounded-lg bg-foreground px-4 text-sm font-semibold text-background transition hover:opacity-90 active:translate-y-px dark:bg-foreground dark:text-background"
+            className="inline-flex h-10 items-center justify-center rounded-lg bg-foreground px-4 text-sm font-semibold text-background transition hover:opacity-90 active:translate-y-px dark:bg-foreground dark:text-background"
           >
             <PortfolioIcon name="github" size={18} weight="fill" />
-            <span className="hidden xs:inline">GitHub</span>
+            <span className="hidden xs:inline ml-2">GitHub</span>
           </a>
         </div>
       </nav>
@@ -201,34 +206,42 @@ function Header({ onOpenTerminal }: { onOpenTerminal: () => void }) {
 function Hero() {
   return (
     <section id="top" className="mx-auto w-full max-w-7xl px-4 pb-20 pt-16 sm:px-6 lg:px-8 lg:pb-28 lg:pt-24">
-      <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+      <div className="grid items-center gap-10 lg:grid-cols-[1.15fr_0.85fr]">
         <Reveal className="max-w-4xl">
           <p className="mono-label mb-5 inline-flex items-center gap-2 rounded-lg border border-line bg-surface px-3 py-1.5 text-xs font-bold text-accent shadow-sm">
             <PortfolioIcon name="location" size={14} weight="bold" />
             {profile.location} / {profile.role}
           </p>
           <h1 className="max-w-4xl text-5xl font-extrabold leading-[1.08] tracking-tight text-foreground sm:text-6xl lg:text-7xl">
-            Thiết kế hệ thống backend, xây dựng ứng dụng full-stack.
+            Designing secure backend APIs & full-stack applications.
           </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-muted sm:text-xl">
+          <p className="mt-6 max-w-2xl text-lg leading-8 text-muted sm:text-xl font-medium">
             {profile.headline}
           </p>
+          
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <a
               href="#projects"
-              className="inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-accent px-6 text-sm font-semibold text-white transition hover:opacity-90 active:translate-y-px shadow-lg shadow-accent/20"
+              className="inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-accent px-6 text-sm font-bold text-white transition hover:opacity-90 active:translate-y-px shadow-lg shadow-accent/20 cursor-pointer"
             >
-              Xem các dự án
+              Explore Work
               <PortfolioIcon name="arrow" size={16} weight="bold" />
             </a>
             <a
-              href={profile.github}
+              href={`mailto:${profile.email}`}
+              className="inline-flex h-12 items-center justify-center gap-2 rounded-lg border border-line bg-surface px-6 text-sm font-semibold text-foreground transition hover:border-accent hover:text-accent active:translate-y-px cursor-pointer"
+            >
+              <PortfolioIcon name="email" size={18} weight="bold" />
+              Email Me
+            </a>
+            <a
+              href={profile.linkedin}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex h-12 items-center justify-center gap-2 rounded-lg border border-line bg-surface px-6 text-sm font-semibold text-foreground transition hover:border-accent hover:text-accent active:translate-y-px"
+              className="inline-flex h-12 items-center justify-center gap-2 rounded-lg border border-line bg-surface px-6 text-sm font-semibold text-foreground transition hover:border-accent hover:text-accent active:translate-y-px cursor-pointer"
             >
-              <PortfolioIcon name="github" size={18} weight="fill" />
-              Tài khoản GitHub
+              <PortfolioIcon name="linkedin" size={18} weight="bold" />
+              LinkedIn
             </a>
           </div>
         </Reveal>
@@ -239,7 +252,7 @@ function Hero() {
             <div className="flex items-center gap-4">
               <Image
                 src="https://github.com/phamthanhtrivn.png"
-                alt="Avatar"
+                alt="Profile Avatar"
                 width={72}
                 height={72}
                 priority
@@ -247,7 +260,7 @@ function Hero() {
               />
               <div>
                 <p className="text-xl font-bold tracking-tight">{profile.displayName}</p>
-                <p className="mt-1 text-sm text-muted">{profile.availability}</p>
+                <p className="mt-1 text-sm text-muted leading-relaxed">{profile.availability}</p>
               </div>
             </div>
             
@@ -256,15 +269,15 @@ function Hero() {
               {metrics.map((metric) => (
                 <div key={metric.label} className="rounded-xl border border-line bg-surface p-3 text-center">
                   <p className="text-xl font-bold text-accent">{metric.value}</p>
-                  <p className="mt-1 text-[10px] leading-4 text-muted uppercase tracking-wider font-semibold">{metric.label.split(":")[0]}</p>
+                  <p className="mt-1 text-[10px] leading-4 text-muted uppercase tracking-wider font-bold">{metric.label}</p>
                 </div>
               ))}
             </div>
           </div>
           <div className="mt-4 rounded-xl border border-line bg-foreground p-5 text-background dark:bg-surface dark:text-foreground">
-            <p className="mono-label text-[10px] text-muted dark:text-accent uppercase tracking-wider font-bold">mục tiêu hiện tại</p>
-            <p className="mt-2 text-base font-semibold leading-7">
-              Biến các bài toán phức tạp thành các sơ đồ kiến trúc rõ ràng, hệ thống chịu tải tốt, code dễ đọc và triển khai Docker tự động.
+            <p className="mono-label text-[10px] text-muted dark:text-accent uppercase tracking-wider font-bold">current goal</p>
+            <p className="mt-2 text-base font-bold leading-7">
+              Translating complex business issues into neat service architectures, optimizing cache behaviors, and automating operations.
             </p>
           </div>
         </Reveal>
@@ -282,15 +295,15 @@ function About() {
     >
       <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.7fr_1.3fr]">
         <div>
-          <p className="mono-label text-xs font-semibold text-accent uppercase tracking-wider">giới thiệu</p>
-          <h2 className="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">
-            Tư duy thiết kế sản phẩm qua góc nhìn kỹ thuật.
+          <p className="mono-label text-xs font-bold text-accent uppercase tracking-wider">about me</p>
+          <h2 className="mt-4 text-3xl font-extrabold tracking-tight sm:text-4xl">
+            Clean Engineering Across The Entire Stack.
           </h2>
         </div>
         <div className="grid gap-6 text-base leading-8 text-muted md:grid-cols-2">
           <p>{profile.intro}</p>
           <p>
-            Các hệ thống mình xây dựng chú trọng chiều sâu backend: phân chia Service boundary hợp lý, cấu hình bảo mật JWT/OAuth, quản lý dữ liệu lớn (PostgreSQL, MongoDB), caching lớp đệm Redis, xử lý bất đồng bộ qua Kafka và tự động hóa quy trình CI/CD.
+            I focus on backend robustness first: establishing REST and WebSocket APIs, securing sessions with JWT policies, optimizing database transactions, and managing message streams via Kafka. I support the user experience by building fast frontends and native mobile clients.
           </p>
         </div>
       </div>
@@ -300,40 +313,117 @@ function About() {
 
 function Skills() {
   return (
-    <Reveal as="section" className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
-      <div className="max-w-3xl">
-        <p className="mono-label text-xs font-semibold text-accent uppercase tracking-wider">kỹ năng chuyên môn</p>
-        <h2 className="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">
-          Bộ công cụ tối ưu hóa hiệu năng và quy trình phát triển
-        </h2>
-      </div>
-      <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        {skillGroups.map((group, index) => (
-          <div key={group.title} className="technical-card rounded-2xl p-5 hover:border-accent/50">
-            <div className="flex items-center gap-3">
-              <span className="grid size-10 place-items-center rounded-xl bg-accent/10 text-accent">
-                <PortfolioIcon
-                  name={index === 0 ? "backend" : index === 1 ? "database" : index === 2 ? "code" : "rocket"}
-                  size={20}
-                  weight="bold"
-                />
-              </span>
-              <h3 className="font-bold text-foreground text-base tracking-tight">{group.title}</h3>
-            </div>
-            <div className="mt-5 flex flex-wrap gap-1.5">
-              {group.items.map((item) => (
-                <span
-                  key={item}
-                  className="rounded-lg border border-line bg-surface/80 px-2.5 py-1.5 text-xs text-muted shadow-sm hover:border-accent/20 hover:text-foreground transition-colors"
-                >
-                  {item}
+    <section id="techstack" className="py-24 border-b border-line transition-colors duration-300">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <Reveal className="max-w-3xl">
+          <p className="mono-label text-xs font-bold text-accent uppercase tracking-wider">technology matrix</p>
+          <h2 className="mt-4 text-3xl font-extrabold tracking-tight sm:text-4xl">
+            My Tooling & Framework Ecosystem
+          </h2>
+          <p className="mt-3 text-muted">
+            Technologies I use to design, develop, deploy, and scale robust web products.
+          </p>
+        </Reveal>
+        
+        <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          {skillGroups.map((group, index) => (
+            <div key={group.title} className="technical-card rounded-2xl p-5 hover:border-accent/50">
+              <div className="flex items-center gap-3">
+                <span className="grid size-10 place-items-center rounded-xl bg-accent/10 text-accent">
+                  <PortfolioIcon
+                    name={index === 0 ? "backend" : index === 1 ? "database" : index === 2 ? "code" : "rocket"}
+                    size={20}
+                    weight="bold"
+                  />
                 </span>
+                <h3 className="font-bold text-foreground text-base tracking-tight">{group.title}</h3>
+              </div>
+              <div className="mt-5 flex flex-wrap gap-1.5">
+                {group.items.map((item) => (
+                  <span
+                    key={item}
+                    className="inline-flex items-center gap-1 rounded-lg border border-line bg-surface/80 px-2.5 py-1.5 text-xs text-muted shadow-sm hover:border-accent/20 hover:text-foreground transition-colors font-medium"
+                  >
+                    <PortfolioIcon name={getTechIconName(item)} size={11} className="text-accent" />
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Resume() {
+  return (
+    <section id="resume" className="py-24 border-b border-line bg-surface-soft/20 transition-colors duration-300">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <Reveal className="max-w-3xl">
+          <p className="mono-label text-xs font-bold text-accent uppercase tracking-wider">career history</p>
+          <h2 className="mt-4 text-3xl font-extrabold tracking-tight sm:text-4xl">
+            Education & Professional Experience
+          </h2>
+          <p className="mt-3 text-muted">
+            A chronological timeline of my training and engineering journey.
+          </p>
+        </Reveal>
+
+        <div className="mt-16 grid gap-12 lg:grid-cols-2">
+          {/* Experience Timeline */}
+          <div>
+            <h3 className="text-lg font-bold text-foreground mb-8 flex items-center gap-3">
+              <span className="grid size-9 place-items-center rounded-lg bg-accent/10 text-accent">
+                <PortfolioIcon name="resume" size={18} weight="bold" />
+              </span>
+              Work Experience
+            </h3>
+            <div className="relative border-l border-line pl-6 space-y-12">
+              {experience.map((item, idx) => (
+                <div key={idx} className="relative">
+                  {/* Timeline point */}
+                  <span className="absolute -left-[31px] top-1.5 grid size-4 place-items-center rounded-full bg-background border-2 border-accent" />
+                  
+                  <span className="mono-label text-xs font-bold text-accent bg-accent/10 px-2.5 py-1 rounded-md">
+                    {item.period}
+                  </span>
+                  <h4 className="mt-3 text-lg font-bold tracking-tight text-foreground">{item.role}</h4>
+                  <p className="text-sm font-semibold text-muted mt-1">{item.company}</p>
+                  <p className="mt-3 text-sm leading-6 text-muted font-medium">{item.description}</p>
+                </div>
               ))}
             </div>
           </div>
-        ))}
+
+          {/* Education Timeline */}
+          <div>
+            <h3 className="text-lg font-bold text-foreground mb-8 flex items-center gap-3">
+              <span className="grid size-9 place-items-center rounded-lg bg-accent/10 text-accent">
+                <PortfolioIcon name="rocket" size={18} weight="bold" />
+              </span>
+              Education & Certifications
+            </h3>
+            <div className="relative border-l border-line pl-6 space-y-12">
+              {education.map((item, idx) => (
+                <div key={idx} className="relative">
+                  {/* Timeline point */}
+                  <span className="absolute -left-[31px] top-1.5 grid size-4 place-items-center rounded-full bg-background border-2 border-accent" />
+                  
+                  <span className="mono-label text-xs font-bold text-accent bg-accent/10 px-2.5 py-1 rounded-md">
+                    {item.period}
+                  </span>
+                  <h4 className="mt-3 text-lg font-bold tracking-tight text-foreground">{item.role}</h4>
+                  <p className="text-sm font-semibold text-muted mt-1">{item.company}</p>
+                  <p className="mt-3 text-sm leading-6 text-muted font-medium">{item.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
-    </Reveal>
+    </section>
   );
 }
 
@@ -341,7 +431,7 @@ function FilterTab({ active, onClick, label }: { active: boolean; onClick: () =>
   return (
     <button
       onClick={onClick}
-      className={`rounded-lg px-4 py-2 text-sm font-semibold transition-all duration-200 cursor-pointer ${
+      className={`rounded-lg px-4 py-2 text-sm font-bold transition-all duration-200 cursor-pointer ${
         active
           ? "bg-accent text-white shadow-md shadow-accent/10"
           : "border border-line bg-surface text-muted hover:border-accent/40 hover:text-foreground"
@@ -381,29 +471,32 @@ function ProjectCard({
           <h3 className="mt-5 text-2xl font-bold tracking-tight text-foreground group-hover:text-accent transition-colors">
             {project.name}
           </h3>
-          <p className="mt-4 text-sm leading-6 text-muted line-clamp-3">{project.summary}</p>
+          <p className="mt-4 text-sm leading-6 text-muted line-clamp-3 font-medium">{project.summary}</p>
         </div>
         
         {/* View case study trigger */}
         <div className="mt-6 flex items-center gap-2 text-sm font-bold text-accent">
-          <span>Xem Case Study chi tiết</span>
+          <span>Read Case Study</span>
           <PortfolioIcon name="arrow" size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
         </div>
       </div>
 
       <div className={featured ? "mt-8 lg:mt-0" : "mt-6"}>
         <div className="rounded-xl border border-line bg-surface-soft/60 p-4">
-          <p className="mono-label text-[10px] text-muted uppercase tracking-wider font-bold">Thách thức</p>
-          <p className="mt-2 text-xs leading-5 text-muted line-clamp-2">{project.problem}</p>
+          <p className="mono-label text-[10px] text-muted uppercase tracking-wider font-bold">Challenge</p>
+          <p className="mt-2 text-xs leading-5 text-muted line-clamp-2 font-medium">{project.problem}</p>
         </div>
+        
+        {/* Display tech stack badges with icons */}
         <div className="mt-4 flex flex-wrap gap-1.5">
           {project.stack.slice(0, 7).map((item) => (
-            <span key={item} className="rounded-lg bg-surface-soft border border-line/40 px-2 py-1 text-[11px] text-muted">
+            <span key={item} className="inline-flex items-center gap-1 rounded-lg bg-surface-soft border border-line/40 px-2 py-1 text-[11px] font-semibold text-muted">
+              <PortfolioIcon name={getTechIconName(item)} size={10} className="text-accent" />
               {item}
             </span>
           ))}
           {project.stack.length > 7 && (
-            <span className="rounded-lg bg-surface-soft px-2 py-1 text-[11px] text-muted font-mono">
+            <span className="rounded-lg bg-surface-soft px-2 py-1 text-[11px] text-muted font-mono font-bold">
               +{project.stack.length - 7}
             </span>
           )}
@@ -421,12 +514,12 @@ function Systems() {
       className="mx-auto grid max-w-7xl gap-10 px-4 py-24 sm:px-6 lg:grid-cols-[0.8fr_1.2fr] lg:px-8"
     >
       <div>
-        <p className="mono-label text-xs font-semibold text-accent uppercase tracking-wider">kiến trúc hệ thống</p>
-        <h2 className="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">
-          Minh chứng thiết kế & Luồng dữ liệu vận hành
+        <p className="mono-label text-xs font-bold text-accent uppercase tracking-wider">systems architecture</p>
+        <h2 className="mt-4 text-3xl font-extrabold tracking-tight sm:text-4xl">
+          Verified Systems Thinking
         </h2>
         <p className="mt-4 text-base leading-7 text-muted">
-          Không chỉ phát triển tính năng bề nổi, các dự án được cấu trúc rõ ràng để kiểm định, tối ưu hóa băng thông, chống quá tải và duy trì trạng thái dữ liệu ổn định theo thời gian thực.
+          My designs separate service boundaries, prioritize load safety, prevent double locks, and integrate logging so components remain stable under real use.
         </p>
       </div>
       <div className="grid gap-4">
@@ -442,7 +535,7 @@ function Systems() {
               </span>
               <div>
                 <h3 className="font-bold text-foreground text-base tracking-tight">{item.title}</h3>
-                <p className="mt-2 text-sm leading-6 text-muted">{item.text}</p>
+                <p className="mt-2 text-sm leading-6 text-muted font-medium">{item.text}</p>
               </div>
             </div>
           </div>
@@ -461,36 +554,47 @@ function Contact() {
     >
       <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
         <div className="max-w-3xl">
-          <p className="mono-label text-xs font-semibold text-accent uppercase tracking-wider">liên hệ</p>
-          <h2 className="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">
-            Quan tâm sâu hơn về giải pháp thiết kế?
+          <p className="mono-label text-xs font-bold text-accent uppercase tracking-wider">get in touch</p>
+          <h2 className="mt-4 text-3xl font-extrabold tracking-tight sm:text-4xl">
+            Want to collaborate or inspect my work?
           </h2>
-          <p className="mt-4 text-base leading-7 text-muted">
-            {profile.contactNote} Bạn có thể kiểm tra trực tiếp mã nguồn, cấu hình CI/CD và lịch sử commit của mình trên các repository GitHub phía trên.
+          <p className="mt-4 text-base leading-7 text-muted font-medium">
+            {profile.contactNote}
           </p>
         </div>
+        
+        {/* Contact links and buttons */}
         <div className="flex flex-col gap-3 sm:flex-row lg:justify-end">
+          <a
+            href={`mailto:${profile.email}`}
+            className="inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-accent px-6 text-sm font-bold text-white transition hover:opacity-90 active:translate-y-px shadow-lg shadow-accent/20 cursor-pointer"
+          >
+            <PortfolioIcon name="email" size={18} weight="bold" />
+            Email Me
+          </a>
+          <a
+            href={profile.linkedin}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex h-12 items-center justify-center gap-2 rounded-lg border border-line bg-surface px-6 text-sm font-bold text-foreground transition hover:border-accent hover:text-accent active:translate-y-px cursor-pointer"
+          >
+            <PortfolioIcon name="linkedin" size={18} weight="bold" />
+            LinkedIn Profile
+          </a>
           <a
             href={profile.github}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-foreground px-6 text-sm font-semibold text-background transition hover:opacity-90 active:translate-y-px dark:bg-foreground dark:text-background"
+            className="inline-flex h-12 items-center justify-center gap-2 border border-line bg-surface px-6 text-sm font-bold text-foreground transition hover:border-accent hover:text-accent active:translate-y-px cursor-pointer"
           >
             <PortfolioIcon name="github" size={18} weight="fill" />
             GitHub Profile
           </a>
-          <a
-            href="#projects"
-            className="inline-flex h-12 items-center justify-center gap-2 rounded-lg border border-line bg-surface px-6 text-sm font-semibold text-foreground transition hover:border-accent hover:text-accent active:translate-y-px"
-          >
-            Duyệt các dự án
-            <PortfolioIcon name="arrow" size={16} weight="bold" />
-          </a>
         </div>
       </div>
       <footer className="mx-auto mt-16 flex max-w-7xl flex-col gap-3 border-t border-line pt-8 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
-        <p className="font-medium">{profile.displayName} / Backend and Full-Stack Developer</p>
-        <p className="mono-label text-xs">github.com/phamthanhtrivn</p>
+        <p className="font-bold">{profile.displayName} / Backend and Full-Stack Developer</p>
+        <p className="mono-label text-xs font-medium">github.com/phamthanhtrivn</p>
       </footer>
     </Reveal>
   );

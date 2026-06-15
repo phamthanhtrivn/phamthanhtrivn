@@ -20,8 +20,8 @@ export function DevTerminal({ isOpen, onClose }: DevTerminalProps) {
   const { theme, setTheme } = useTheme();
   const [input, setInput] = useState("");
   const [history, setHistory] = useState<HistoryLine[]>([
-    { type: "output", text: `Pham Thanh Tri CLI [Version 1.0.0]` },
-    { type: "output", text: `Type 'help' to see list of available commands.` },
+    { type: "output", text: `Pham Thanh Tri CLI [Version 1.1.0]` },
+    { type: "output", text: `Type 'help' to see the list of available commands.` },
     { type: "output", text: `` },
   ]);
   const [cmdHistory, setCmdHistory] = useState<string[]>([]);
@@ -50,7 +50,7 @@ export function DevTerminal({ isOpen, onClose }: DevTerminalProps) {
     terminalEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [history]);
 
-  // Handle outside click & escape key
+  // Handle ESC key
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -61,7 +61,7 @@ export function DevTerminal({ isOpen, onClose }: DevTerminalProps) {
 
   if (!isOpen) return null;
 
-  const COMMANDS = ["help", "clear", "about", "skills", "projects", "contact", "theme", "exit", "sudo", "neofetch"];
+  const COMMANDS = ["help", "clear", "about", "skills", "projects", "contact", "theme", "linkedin", "email", "neofetch", "exit", "sudo"];
 
   const handleCommand = (rawCmd: string) => {
     const trimmed = rawCmd.trim();
@@ -81,13 +81,15 @@ export function DevTerminal({ isOpen, onClose }: DevTerminalProps) {
         setHistory((prev) => [
           ...prev,
           { type: "output", text: "Available commands:" },
-          { type: "output", text: "  about          - View professional introduction" },
+          { type: "output", text: "  about          - View professional biography" },
           { type: "output", text: "  skills         - List specialized tech stack" },
-          { type: "output", text: "  projects       - Show public portfolio systems" },
-          { type: "output", text: "  contact        - Get contact details" },
-          { type: "output", text: "  theme [l|d|t]  - Change theme (light, dark, toggle)" },
-          { type: "output", text: "  neofetch       - Display system specifications" },
-          { type: "output", text: "  clear          - Clear terminal log screen" },
+          { type: "output", text: "  projects       - Show portfolio projects & case studies" },
+          { type: "output", text: "  contact        - Display contact notes" },
+          { type: "output", text: "  linkedin       - Open my LinkedIn profile" },
+          { type: "output", text: "  email          - Open a mail client to write to me" },
+          { type: "output", text: "  theme [l|d|t]  - Switch theme (light, dark, toggle)" },
+          { type: "output", text: "  neofetch       - Display dynamic system metrics" },
+          { type: "output", text: "  clear          - Clear terminal screen log" },
           { type: "output", text: "  exit           - Close terminal interface" },
         ]);
         break;
@@ -126,7 +128,7 @@ export function DevTerminal({ isOpen, onClose }: DevTerminalProps) {
 
       case "projects":
         setHistory((prev) => {
-          const lines: HistoryLine[] = [{ type: "output", text: "Featured Systems:" }];
+          const lines: HistoryLine[] = [{ type: "output", text: "Portfolio Project Index:" }];
           projects.forEach((proj) => {
             lines.push({ type: "output", text: `  * ${proj.name} (${proj.role})` });
             lines.push({ type: "output", text: `    Summary: ${proj.summary}` });
@@ -141,36 +143,48 @@ export function DevTerminal({ isOpen, onClose }: DevTerminalProps) {
         setHistory((prev) => [
           ...prev,
           { type: "output", text: `Contact note: ${profile.contactNote}` },
+          { type: "output", text: `Email:        ${profile.email}` },
+          { type: "output", text: `LinkedIn:     ${profile.linkedin}` },
           { type: "output", text: `GitHub:       ${profile.github}` },
         ]);
+        break;
+
+      case "linkedin":
+        setHistory((prev) => [...prev, { type: "output", text: `Opening LinkedIn: ${profile.linkedin}` }]);
+        window.open(profile.linkedin, "_blank");
+        break;
+
+      case "email":
+        setHistory((prev) => [...prev, { type: "output", text: `Opening mailto link: mailto:${profile.email}` }]);
+        window.open(`mailto:${profile.email}`, "_self");
         break;
 
       case "theme":
         const sub = args[0]?.toLowerCase();
         if (sub === "light" || sub === "l") {
           setTheme("light");
-          setHistory((prev) => [...prev, { type: "output", text: "Theme switched to Light mode." }]);
+          setHistory((prev) => [...prev, { type: "output", text: "Theme set to Light." }]);
         } else if (sub === "dark" || sub === "d") {
           setTheme("dark");
-          setHistory((prev) => [...prev, { type: "output", text: "Theme switched to Dark mode." }]);
+          setHistory((prev) => [...prev, { type: "output", text: "Theme set to Dark." }]);
         } else if (sub === "toggle" || sub === "t" || !sub) {
           const newTheme = theme === "light" ? "dark" : "light";
           setTheme(newTheme);
-          setHistory((prev) => [...prev, { type: "output", text: `Theme toggled to ${newTheme} mode.` }]);
+          setHistory((prev) => [...prev, { type: "output", text: `Theme toggled to ${newTheme}.` }]);
         } else {
-          setHistory((prev) => [...prev, { type: "error", text: "Invalid argument. Use: theme [light | dark | toggle]" }]);
+          setHistory((prev) => [...prev, { type: "error", text: "Usage: theme [light | dark | toggle]" }]);
         }
         break;
 
       case "neofetch":
         setHistory((prev) => [
           ...prev,
-          { type: "output", text: "    /\\_/\\          tri@portfolio" },
-          { type: "output", text: "   ( o.o )         OS: Next.js 16.2 (React 19)" },
-          { type: "output", text: "    > ^ <          Host: Localhost:3000" },
-          { type: "output", text: "   /     \\         Kernel: Tailwind CSS v4" },
-          { type: "output", text: "  (|     |)        Shell: Custom React CLI" },
-          { type: "output", text: "  (_||_||_)        Terminal: Hermit-shell" },
+          { type: "output", text: "     .---.         tri@portfolio" },
+          { type: "output", text: "    /     \\        OS: Next.js 16 (React 19)" },
+          { type: "output", text: "    \\  o  /        Host: Localhost:3000" },
+          { type: "output", text: "     `---'         Kernel: Tailwind CSS v4 (Blue Mode)" },
+          { type: "output", text: "    /  |  \\        Shell: Interactive React Terminal" },
+          { type: "output", text: "   /   |   \\       Fonts: Plus Jakarta Sans / Fira Code" },
         ]);
         break;
 
@@ -178,18 +192,18 @@ export function DevTerminal({ isOpen, onClose }: DevTerminalProps) {
         if (args.join(" ") === "rm -rf /") {
           setHistory((prev) => [
             ...prev,
-            { type: "error", text: "sudo: rm -rf / is extremely dangerous!" },
-            { type: "output", text: "rm: cannot remove '/': Permission denied. Just kidding :)" },
+            { type: "error", text: "sudo: rm -rf / is blocked in this sandbox!" },
+            { type: "output", text: "rm: cannot delete absolute root directory. Nice try though :)" },
           ]);
         } else {
-          setHistory((prev) => [...prev, { type: "error", text: "sudo: Permission denied. You are already root in this sandbox." }]);
+          setHistory((prev) => [...prev, { type: "error", text: "sudo: Permission denied. Access token missing." }]);
         }
         break;
 
       default:
         setHistory((prev) => [
           ...prev,
-          { type: "error", text: `Command not found: '${cmd}'. Type 'help' for support.` },
+          { type: "error", text: `Command not found: '${cmd}'. Type 'help' to show commands.` },
         ]);
         break;
     }
@@ -202,7 +216,6 @@ export function DevTerminal({ isOpen, onClose }: DevTerminalProps) {
       handleCommand(input);
     } else if (e.key === "Tab") {
       e.preventDefault();
-      // Simple autocomplete
       const match = COMMANDS.find((cmd) => cmd.startsWith(input.toLowerCase()));
       if (match) setInput(match);
     } else if (e.key === "ArrowUp") {
@@ -234,7 +247,7 @@ export function DevTerminal({ isOpen, onClose }: DevTerminalProps) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm"
+          className="fixed inset-0 bg-black/70 backdrop-blur-sm"
         />
 
         {/* Terminal frame */}
@@ -243,19 +256,19 @@ export function DevTerminal({ isOpen, onClose }: DevTerminalProps) {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 15 }}
           transition={{ duration: 0.25 }}
-          className="relative z-10 flex h-full max-h-[550px] w-full max-w-3xl flex-col rounded-xl border border-teal-500/30 bg-[#050706] text-emerald-500 shadow-2xl overflow-hidden font-mono"
+          className="relative z-10 flex h-full max-h-[550px] w-full max-w-3xl flex-col rounded-xl border border-blue-500/30 bg-[#030712] text-cyan-400 shadow-2xl overflow-hidden font-mono"
         >
           {/* Title bar */}
-          <div className="flex items-center justify-between border-b border-teal-500/20 bg-[#0a0f0d] px-4 py-3">
+          <div className="flex items-center justify-between border-b border-blue-500/20 bg-[#0b0f19] px-4 py-3">
             <div className="flex items-center gap-2">
               <span className="size-3 rounded-full bg-red-500/60" />
               <span className="size-3 rounded-full bg-yellow-500/60" />
-              <span className="size-3 rounded-full bg-emerald-500/60" />
-              <span className="ml-2 text-xs text-emerald-500/60">tri@portfolio:~</span>
+              <span className="size-3 rounded-full bg-blue-500/60" />
+              <span className="ml-2 text-xs text-cyan-400/60">tri@portfolio:~</span>
             </div>
             <button
               onClick={onClose}
-              className="rounded p-1 text-emerald-500/50 hover:bg-emerald-500/10 hover:text-emerald-500 transition-colors"
+              className="rounded p-1 text-cyan-400/50 hover:bg-cyan-500/10 hover:text-cyan-400 transition-colors cursor-pointer"
             >
               <PortfolioIcon name="arrow" size={16} className="rotate-45" />
             </button>
@@ -263,7 +276,7 @@ export function DevTerminal({ isOpen, onClose }: DevTerminalProps) {
 
           {/* Console Area */}
           <div
-            className="flex-1 overflow-y-auto px-5 py-4 space-y-2 text-sm selection:bg-teal-500/25 selection:text-white"
+            className="flex-1 overflow-y-auto px-5 py-4 space-y-2 text-sm selection:bg-blue-500/25 selection:text-white"
             onClick={() => inputRef.current?.focus()}
           >
             {history.map((line, idx) => (
@@ -274,10 +287,10 @@ export function DevTerminal({ isOpen, onClose }: DevTerminalProps) {
                     ? "text-white"
                     : line.type === "error"
                     ? "text-red-400"
-                    : "text-emerald-400/90"
+                    : "text-cyan-300"
                 }
               >
-                {line.type === "input" && <span className="text-emerald-500 mr-2">$</span>}
+                {line.type === "input" && <span className="text-cyan-400 mr-2">$</span>}
                 <span className="whitespace-pre-wrap">{line.text}</span>
               </div>
             ))}
@@ -285,20 +298,20 @@ export function DevTerminal({ isOpen, onClose }: DevTerminalProps) {
           </div>
 
           {/* Input Area */}
-          <div className="flex items-center border-t border-teal-500/20 bg-[#070b09] px-5 py-3">
-            <span className="text-emerald-500 mr-2 shrink-0">$</span>
+          <div className="flex items-center border-t border-blue-500/20 bg-[#060a15] px-5 py-3">
+            <span className="text-cyan-400 mr-2 shrink-0">$</span>
             <input
               ref={inputRef}
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="flex-1 bg-transparent text-white focus:outline-none caret-emerald-500 font-mono"
-              placeholder="gõ lệnh tại đây... (ví dụ: 'help')"
+              className="flex-1 bg-transparent text-white focus:outline-none caret-cyan-400 font-mono"
+              placeholder="type a command... (e.g. 'help')"
               autoFocus
             />
-            <span className="text-[10px] text-emerald-500/40 select-none hidden sm:inline">
-              [Tab] gợi ý | [Esc] thoát
+            <span className="text-[10px] text-cyan-400/40 select-none hidden sm:inline">
+              [Tab] autocomplete | [Esc] close
             </span>
           </div>
         </motion.div>
