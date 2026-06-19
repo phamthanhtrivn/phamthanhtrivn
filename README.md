@@ -24,7 +24,6 @@ Backend-focused Software Engineering student with hands-on experience developing
 ![](https://skillicons.dev/icons?i=java,js,ts,spring,nodejs,express,nestjs&perline=10)![](https://skillicons.dev/icons?i=react,redux,tailwind,html,css&perline=10)![](https://skillicons.dev/icons?i=mysql,postgres,mongodb,redis,kafka&perline=10)![](https://skillicons.dev/icons?i=docker,git,github,githubactions,aws,nginx,linux&perline=10)
 
 **Core Technologies & Tools:**
-
 - **Programming Languages:** Java, JavaScript, TypeScript
 - **Backend:** Spring Boot, Spring Security, Spring Data JPA, RESTful APIs, Microservices, JWT, OAuth2, Redis, Kafka, Node.js, Express.js, NestJS
 - **Frontend:** React.js, Redux Toolkit, React Query, Tailwind CSS, Shadcn UI, HTML5, CSS3
@@ -34,4 +33,7 @@ Backend-focused Software Engineering student with hands-on experience developing
 
 ### 📈 GitHub Stats
 
-![GitHub Streak](https://github-readme-streak-stats.herokuapp.com/?user=phamthanhtrivn&theme=tokyonight&hide_border=true&background=0D1117)
+<p align="center">
+  <img src="https://github-readme-streak-stats.herokuapp.com/?user=phamthanhtrivn&theme=tokyonight&hide_border=true&background=0D1117" />
+  <img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=phamthanhtrivn&layout=compact&theme=tokyonight&hide_border=true" />
+</p>
