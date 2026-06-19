@@ -31,15 +31,15 @@ export type TimelineItem = {
 export const profile = {
   name: "Pham Thanh Tri",
   displayName: "Pham Thanh Tri",
-  role: "Backend / Full-Stack Developer",
-  location: "Viet Nam",
+  role: "Backend / Fullstack Developer Intern",
+  location: "Thu Duc, Ho Chi Minh City",
   github: "https://github.com/phamthanhtrivn",
   linkedin: "https://linkedin.com/in/phamthanhtri",
   email: "phamthanhtri0712@gmail.com",
   headline:
-    "I build production-grade systems across backend services, full-stack apps, realtime flows, databases, and deployment pipelines.",
+    "Backend-focused Software Engineering student with hands-on experience developing web applications using Java and Spring Boot.",
   intro:
-    "Building scalable web applications with Spring Boot, React, Kafka, Redis, Docker, and AWS. Passionate about microservices architecture, real-time systems, cloud-native development, and AI-powered solutions.",
+    "Backend-focused Software Engineering student with hands-on experience developing web applications using Java and Spring Boot. Proven capability in designing database schemas, UML diagrams, and building both Monolithic and Microservices-based architectures through real-world projects. Familiar with Docker, GitHub Actions (CI/CD), and deploying applications on cloud platforms (AWS).",
   availability:
     "Available for backend and full-stack software engineering roles",
   contactNote:

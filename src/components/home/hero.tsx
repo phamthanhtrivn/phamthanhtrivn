@@ -35,11 +35,7 @@ export function Hero() {
               Overview
             </h3>
             <p className="mt-3 max-w-2xl text-base leading-7 text-muted sm:text-lg">
-              Backend & Full-Stack Developer passionate about building scalable
-              systems, real-time applications, and AI-powered solutions.
-              Experienced with Spring Boot, React, Microservices, Kafka, Redis,
-              Docker, and AWS, with a strong focus on clean architecture,
-              performance optimization, and cloud-native development.
+              {profile.intro}
             </p>
           </div>
 
@@ -80,7 +76,7 @@ export function Hero() {
                 </span>
                 <span>
                   <strong className="text-foreground">GPA:</strong> 3.46 / 4.0
-                  (Received 4 academic scholarships)
+                  (Received 4 academic scholarships based on semester GPA)
                 </span>
               </li>
             </ul>
