@@ -13,7 +13,7 @@ export function Hero() {
   return (
     <section
       id="home"
-      className="relative isolate mx-auto flex min-h-[calc(100dvh-4rem)] w-full max-w-7xl items-center overflow-hidden px-4 py-12 sm:px-6 lg:px-8 lg:py-16"
+      className="relative isolate mx-auto flex min-h-[calc(100dvh-4rem)] w-full max-w-7xl items-center overflow-hidden px-4 py-8 sm:px-6 lg:px-8 lg:py-12"
     >
       <HeroAtmosphere />
 
@@ -81,8 +81,24 @@ export function Hero() {
               </li>
             </ul>
           </div>
+        </Reveal>
 
-          <div className="mt-10 flex flex-wrap justify-center lg:justify-start gap-3">
+        {/* Right Column: Avatar and Role */}
+        <Reveal className="flex w-full flex-col items-center justify-center order-1 lg:order-2 gap-8">
+          <div className="justify-center">
+            <AvatarOrb prefersReducedMotion={prefersReducedMotion} />
+          </div>
+
+          <div className="text-center w-full max-w-md flex flex-col items-center justify-center">
+            <h2 className="text-3xl font-extrabold text-foreground">
+              {profile.name}
+            </h2>
+            <p className="mt-2 text-lg font-semibold text-accent uppercase tracking-widest">
+              {profile.role}
+            </p>
+            <div className="mt-4 h-px w-16 bg-accent/30 mx-auto" />
+          </div>
+          <div className="mt-2 flex flex-wrap justify-center items-center gap-3">
             <a
               href="#projects"
               className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-accent px-6 text-sm font-bold text-white transition duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-px hover:shadow-lg hover:shadow-accent/20 active:translate-y-px cursor-pointer"
@@ -106,26 +122,6 @@ export function Hero() {
               <PortfolioIcon name="resume" size={18} />
               View Resume
             </a>
-          </div>
-        </Reveal>
-
-        {/* Right Column: Avatar and Role */}
-        <Reveal className="flex w-full flex-col items-center justify-center order-1 lg:order-2 gap-8">
-          <div className="justify-center">
-            <AvatarOrb prefersReducedMotion={prefersReducedMotion} />
-          </div>
-
-          <div className="text-center w-full max-w-md flex flex-col items-center justify-center">
-            <h2 className="text-3xl font-extrabold text-foreground">
-              {profile.name}
-            </h2>
-            <p className="mt-2 text-lg font-semibold text-accent uppercase tracking-widest">
-              {profile.role}
-            </p>
-            <div className="mt-4 h-px w-16 bg-accent/30 mx-auto" />
-            <p className="mt-4 text-muted leading-relaxed text-sm sm:text-base">
-              {profile.intro}
-            </p>
           </div>
         </Reveal>
       </div>
@@ -233,7 +229,7 @@ function HeroAtmosphere() {
       <div className="absolute left-[59%] top-[31%] h-px w-[18%] rotate-[-22deg] bg-linear-to-r from-transparent via-accent/30 to-transparent" />
       <div className="absolute left-[29%] top-[63%] h-px w-[29%] rotate-9 bg-linear-to-r from-transparent via-accent/20 to-transparent" />
 
-      <div className="absolute inset-x-0 bottom-6 overflow-hidden mask-[linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+      <div className="absolute inset-x-0 bottom-2 overflow-hidden mask-[linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
         <div className="hero-code-marquee flex w-max items-center gap-12 whitespace-nowrap text-[10px] font-semibold uppercase tracking-[0.34em] text-muted/60">
           <span>
             spring boot / microservices / kafka / redis / websocket / docker
