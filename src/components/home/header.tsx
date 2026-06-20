@@ -13,15 +13,28 @@ export function Header({ navItems, onOpenTerminal }: HeaderProps) {
   const [activeSection, setActiveSection] = useState<string>("#home");
 
   useEffect(() => {
+    const handleScroll = () => {
+      // If we've scrolled to the very bottom of the page, force the last nav item to be active
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 50) {
+        const lastItem = navItems[navItems.length - 1];
+        if (lastItem) setActiveSection(lastItem.href);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(`#${entry.target.id}`);
-          }
-        });
+        // Only update from observer if we are not at the very bottom
+        if (window.innerHeight + window.scrollY < document.body.offsetHeight - 50) {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              setActiveSection(`#${entry.target.id}`);
+            }
+          });
+        }
       },
-      { rootMargin: "-30% 0px -70% 0px" },
+      // Adjusted rootMargin to make it easier for smaller sections to trigger
+      { rootMargin: "-20% 0px -50% 0px" },
     );
 
     navItems.forEach((item) => {
@@ -32,7 +45,10 @@ export function Header({ navItems, onOpenTerminal }: HeaderProps) {
       }
     });
 
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, [navItems]);
 
   return (

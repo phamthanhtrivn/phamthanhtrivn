@@ -76,7 +76,11 @@ type PortfolioIconProps = IconProps & {
   name: IconName;
 };
 
-export function PortfolioIcon({ name, weight = "regular", ...props }: PortfolioIconProps) {
+export function PortfolioIcon({
+  name,
+  weight = "regular",
+  ...props
+}: PortfolioIconProps) {
   const Icon = icons[name] || BracketsCurly; // fallback to code brackets if icon not found
   return <Icon aria-hidden="true" weight={weight} {...props} />;
 }
@@ -84,7 +88,7 @@ export function PortfolioIcon({ name, weight = "regular", ...props }: PortfolioI
 // Helper to map tech stack string to an icon key
 export function getTechIconName(tech: string): IconName {
   const t = tech.toLowerCase().replace(/[\s\.\-\/]/g, "");
-  
+
   if (t.includes("react") || t.includes("next")) return "react";
   if (t === "java") return "java";
   if (t.includes("springboot")) return "springboot";
@@ -92,20 +96,29 @@ export function getTechIconName(tech: string): IconName {
   if (t.includes("nestjs")) return "nestjs";
   if (t.includes("node") || t.includes("express")) return "nodejs";
   if (t.includes("docker")) return "docker";
-  if (t.includes("redis") || t.includes("sql") || t.includes("mongo") || t.includes("postgres") || t.includes("db") || t.includes("prisma")) return "database";
+  if (
+    t.includes("redis") ||
+    t.includes("sql") ||
+    t.includes("mongo") ||
+    t.includes("postgres") ||
+    t.includes("db") ||
+    t.includes("prisma")
+  )
+    return "database";
   if (t.includes("stripe")) return "stripe";
-  if (t.includes("aws") || t.includes("cloud") || t.includes("vercel")) return "aws";
+  if (t.includes("aws") || t.includes("cloud") || t.includes("vercel"))
+    return "aws";
   if (t.includes("clerk")) return "clerk";
   if (t.includes("websocket") || t.includes("socket")) return "websocket";
   if (t.includes("kafka")) return "kafka";
-  
+
   return "code";
 }
 
 // Helper to map tech stack string to thesvg.org slug
 export function getTheSvgUrl(tech: string): string | null {
   const t = tech.toLowerCase().replace(/[\s\.\-\/\(\)]/g, "");
-  
+
   const map: Record<string, string> = {
     java: "java",
     javascript: "javascript",
@@ -121,7 +134,6 @@ export function getTheSvgUrl(tech: string): string | null {
     nestjs: "nestjs",
     reactjs: "react",
     reduxtoolkit: "redux",
-    reactquery: "reactquery",
     tailwindcss: "tailwind-css",
     shadcnui: "shadcn-ui",
     html5: "html5",
@@ -140,7 +152,7 @@ export function getTheSvgUrl(tech: string): string | null {
     linux: "linux",
     jwt: "jwt",
     oauth2: "oauth",
-    cloudinary: "cloudinary"
+    cloudinary: "cloudinary",
   };
 
   const slug = map[t];

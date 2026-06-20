@@ -7,110 +7,161 @@ import { profile } from "@/lib/portfolio-data";
 import type { FormEvent } from "react";
 
 export function ContactSection() {
-  const [formState, setFormState] = useState({ name: "", email: "", message: "" });
+  const [formState, setFormState] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const subject = `Portfolio inquiry from ${formState.name || "a visitor"}`;
+    const subject = `Portfolio Inquiry from ${formState.name || "a visitor"}`;
     const body = `Name: ${formState.name}\nEmail: ${formState.email}\n\n${formState.message}`;
 
     window.location.href = `mailto:${profile.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   };
 
   return (
-    <section id="contact" className="border-t border-line bg-surface-soft/35 py-24 transition-colors duration-300">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[1.1fr_0.9fr]">
-          <Reveal>
-            <div className="rounded-4xl border border-line bg-surface p-6 shadow-[0_18px_50px_-34px_rgba(0,0,0,0.2)] sm:p-8">
-              <p className="mono-label text-xs font-bold uppercase tracking-wider text-accent">contact</p>
-              <h2 className="mt-4 text-3xl font-extrabold tracking-tight sm:text-4xl">
-                Let&apos;s build something that feels sharp and useful.
+    <section
+      id="contact"
+      className="border-t border-line bg-surface-soft/35 py-24 transition-colors duration-300"
+    >
+      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+        <Reveal>
+          <div className="rounded-2xl border border-line bg-surface p-8 shadow-xl sm:p-12">
+            <div className="text-center">
+              <h2 className="text-4xl font-extrabold leading-[1.03] tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+                Contact <span className="text-accent">Me</span>
               </h2>
-              <p className="mt-4 max-w-2xl text-base leading-8 text-muted sm:text-lg">
-                If you have a product, role, or collaboration in mind, send a note. I usually reply fastest by email, but LinkedIn and GitHub are open too.
+              <p className="mx-auto mt-4 max-w-xl text-base text-foreground/80 sm:text-[17px] leading-relaxed">
+                Always open for internship opportunities, freelance projects,
+                and collaboration. Let&apos;s build something amazing together!
               </p>
+            </div>
 
-              <form className="mt-8 grid gap-4" onSubmit={handleSubmit}>
-                <div className="grid gap-2">
-                  <label className="text-sm font-semibold text-foreground" htmlFor="name">Name</label>
-                  <input
-                    id="name"
-                    value={formState.name}
-                    onChange={(event) => setFormState((current) => ({ ...current, name: event.target.value }))}
-                    className="h-12 rounded-2xl border border-line bg-background px-4 text-sm text-foreground outline-none transition placeholder:text-muted/70 focus:border-accent"
-                    placeholder="Your name"
-                  />
+            <div className="mt-12 grid gap-12 md:grid-cols-[1.1fr_0.9fr] md:gap-12">
+              {/* Left Column: Form */}
+              <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+                <input
+                  id="name"
+                  required
+                  value={formState.name}
+                  onChange={(event) =>
+                    setFormState((current) => ({
+                      ...current,
+                      name: event.target.value,
+                    }))
+                  }
+                  className="h-12 w-full rounded-xl border border-line bg-background px-4 text-sm text-foreground outline-none transition placeholder:text-muted focus:border-accent"
+                  placeholder="Your Name"
+                />
+
+                <input
+                  id="email"
+                  type="email"
+                  required
+                  value={formState.email}
+                  onChange={(event) =>
+                    setFormState((current) => ({
+                      ...current,
+                      email: event.target.value,
+                    }))
+                  }
+                  className="h-12 w-full rounded-xl border border-line bg-background px-4 text-sm text-foreground outline-none transition placeholder:text-muted focus:border-accent"
+                  placeholder="Your Email"
+                />
+
+                <textarea
+                  id="message"
+                  required
+                  rows={5}
+                  value={formState.message}
+                  onChange={(event) =>
+                    setFormState((current) => ({
+                      ...current,
+                      message: event.target.value,
+                    }))
+                  }
+                  className="w-full resize-none rounded-xl border border-line bg-background px-4 py-3 text-sm text-foreground outline-none transition placeholder:text-muted focus:border-accent"
+                  placeholder="Your Message"
+                />
+
+                <div className="flex flex-col gap-3 mt-2">
+                  <button
+                    type="submit"
+                    className="flex h-12 w-full items-center justify-center rounded-xl bg-accent px-6 text-sm font-semibold tracking-wide text-white transition hover:opacity-90 cursor-pointer active:scale-[0.98]"
+                  >
+                    SEND MESSAGE
+                  </button>
                 </div>
-
-                <div className="grid gap-2">
-                  <label className="text-sm font-semibold text-foreground" htmlFor="email">Email</label>
-                  <input
-                    id="email"
-                    type="email"
-                    value={formState.email}
-                    onChange={(event) => setFormState((current) => ({ ...current, email: event.target.value }))}
-                    className="h-12 rounded-2xl border border-line bg-background px-4 text-sm text-foreground outline-none transition placeholder:text-muted/70 focus:border-accent"
-                    placeholder="you@example.com"
-                  />
-                </div>
-
-                <div className="grid gap-2">
-                  <label className="text-sm font-semibold text-foreground" htmlFor="message">Message</label>
-                  <textarea
-                    id="message"
-                    rows={6}
-                    value={formState.message}
-                    onChange={(event) => setFormState((current) => ({ ...current, message: event.target.value }))}
-                    className="resize-none rounded-2xl border border-line bg-background px-4 py-3 text-sm text-foreground outline-none transition placeholder:text-muted/70 focus:border-accent"
-                    placeholder="Tell me about your project, timeline, or the role you have in mind."
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="inline-flex h-12 w-fit items-center justify-center gap-2 rounded-full bg-accent px-6 text-sm font-bold text-white transition duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-px hover:shadow-lg hover:shadow-accent/20 active:translate-y-px"
-                >
-                  Send Message
-                  <PortfolioIcon name="arrow" size={16} weight="bold" />
-                </button>
               </form>
-            </div>
-          </Reveal>
 
-          <Reveal delay={0.08}>
-            <div className="grid gap-6">
-              <div className="rounded-4xl border border-line bg-foreground p-6 text-background shadow-[0_18px_50px_-34px_rgba(0,0,0,0.45)] dark:bg-surface dark:text-foreground">
-                <p className="text-xs font-bold uppercase tracking-[0.24em] text-accent">direct email</p>
-                <a href={`mailto:${profile.email}`} className="mt-3 block text-2xl font-extrabold tracking-tight sm:text-3xl">
-                  {profile.email}
-                </a>
-                <p className="mt-4 text-sm leading-6 text-background/75 dark:text-muted">
-                  Fastest way to reach me for hiring, project work, or a short technical conversation.
-                </p>
-              </div>
+              {/* Right Column: Contact Info */}
+              <div className="flex flex-col justify-center items-center lg:justify-start pt-2">
+                <div className="grid gap-6">
+                  {/* Location */}
+                  <div className="flex items-start gap-3 text-foreground">
+                    <div className="mt-1 text-accent">
+                      <PortfolioIcon
+                        name="location"
+                        size={24}
+                        weight="regular"
+                      />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-lg">Location</h3>
+                      <p className="text-[15px] mt-1 text-foreground/80">
+                        {profile.location}
+                      </p>
+                    </div>
+                  </div>
 
-              <div className="rounded-4xl border border-line bg-surface p-6 shadow-[0_18px_50px_-34px_rgba(0,0,0,0.18)]">
-                <p className="text-xs font-bold uppercase tracking-[0.24em] text-accent">social links</p>
-                <div className="mt-4 grid gap-3">
-                  {profile.links.map((link) => (
+                  {/* Links */}
+                  <div className="flex flex-col gap-4 mt-4">
                     <a
-                      key={link.label}
-                      href={link.href}
-                      target={link.href.startsWith("#") ? undefined : "_blank"}
-                      rel={link.href.startsWith("#") ? undefined : "noreferrer"}
-                      className="flex items-center justify-between rounded-2xl border border-line bg-background px-4 py-3 text-sm font-semibold text-foreground transition hover:border-accent/40 hover:text-accent"
+                      href={`mailto:${profile.email}`}
+                      className="flex items-center gap-3 text-accent hover:underline font-medium text-[15px]"
                     >
-                      <span>{link.label}</span>
-                      <PortfolioIcon name="arrow" size={16} weight="bold" />
+                      <PortfolioIcon name="email" size={22} weight="regular" />
+                      {profile.email}
                     </a>
-                  ))}
+
+                    <a
+                      href={profile.linkedin}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-3 text-accent hover:underline font-medium text-[15px]"
+                    >
+                      <PortfolioIcon name="linkedin" size={22} weight="fill" />
+                      {profile.linkedin.replace(
+                        "https://www.linkedin.com/in/",
+                        "linkedin.com/in/",
+                      )}
+                    </a>
+
+                    <a
+                      href={profile.github}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-3 text-accent hover:underline font-medium text-[15px]"
+                    >
+                      <PortfolioIcon name="github" size={22} weight="fill" />
+                      {profile.github.replace(
+                        "https://github.com/",
+                        "github.com/",
+                      )}
+                    </a>
+                  </div>
+                </div>
+
+                <div className="mt-10 font-extrabold uppercase tracking-wide text-xl text-foreground">
+                  LET&apos;S WORK TOGETHER
                 </div>
               </div>
             </div>
-          </Reveal>
-        </div>
+          </div>
+        </Reveal>
       </div>
     </section>
   );

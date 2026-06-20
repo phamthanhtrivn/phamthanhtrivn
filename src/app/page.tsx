@@ -8,7 +8,7 @@ import { Hero } from "@/components/home/hero";
 import { FeaturedProjects } from "@/components/home/featured-projects";
 import { TechStack } from "@/components/home/tech-stack";
 import { ContactSection } from "@/components/home/contact-section";
-import type { Project } from "@/lib/portfolio-data";
+import { profile, type Project } from "@/lib/portfolio-data";
 
 const navItems = [
   { label: "Home", href: "#home" },
@@ -47,6 +47,13 @@ export default function Home() {
       <TechStack />
       <FeaturedProjects onSelectProject={setSelectedProject} />
       <ContactSection />
+
+      <footer className="border-t border-line bg-background py-8 text-center text-sm text-muted">
+        <p>
+          &copy; {new Date().getFullYear()} {profile.displayName}. All rights
+          reserved.
+        </p>
+      </footer>
 
       <CaseStudyDrawer
         key={selectedProject?.name ?? "closed"}

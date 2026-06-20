@@ -34,7 +34,7 @@ export const profile = {
   role: "Backend / Fullstack Developer Intern",
   location: "Thu Duc, Ho Chi Minh City",
   github: "https://github.com/phamthanhtrivn",
-  linkedin: "https://linkedin.com/in/phamthanhtri",
+  linkedin: "https://www.linkedin.com/in/phamthanhtrivn",
   email: "phamthanhtri0712@gmail.com",
   headline:
     "Backend-focused Software Engineering student with hands-on experience developing web applications using Java and Spring Boot.",
@@ -63,11 +63,7 @@ export const profile = {
 export const skillGroups: SkillGroup[] = [
   {
     title: "Programming Languages",
-    items: [
-      "Java",
-      "JavaScript",
-      "TypeScript",
-    ],
+    items: ["Java", "JavaScript", "TypeScript"],
   },
   {
     title: "Backend",
@@ -100,13 +96,7 @@ export const skillGroups: SkillGroup[] = [
   },
   {
     title: "Databases",
-    items: [
-      "MySQL",
-      "MariaDB",
-      "PostgreSQL",
-      "pgvector",
-      "MongoDB",
-    ],
+    items: ["MySQL", "MariaDB", "PostgreSQL", "pgvector", "MongoDB"],
   },
   {
     title: "DevOps & Cloud",
@@ -122,13 +112,7 @@ export const skillGroups: SkillGroup[] = [
   },
   {
     title: "AI & Integration",
-    items: [
-      "Spring AI",
-      "RAG",
-      "Cloudinary",
-      "VNPay",
-      "MoMo",
-    ],
+    items: ["Spring AI", "RAG", "Cloudinary", "VNPay", "MoMo"],
   },
 ];
 
