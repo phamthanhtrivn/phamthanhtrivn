@@ -119,16 +119,17 @@ export const skillGroups: SkillGroup[] = [
 export const projects: Project[] = [
   {
     name: "Alpha Cinema",
-    role: "Full-stack Engineer",
+    role: "Team Leader",
     status: "Featured System",
     summary:
-      "Movie ticket booking platform featuring guest reservations, staff operations, dashboard management, realtime seat status, payment systems, and an AI support agent.",
+      "Ticket Management & Cinema Operation System featuring high-concurrency seat locking, asynchronous payments, and an AI Chatbot.",
     problem:
       "Cinema administration requires synced booking status, secure checkout, role-based workflows, and automated communication across services.",
     features: [
-      "Customer booking flow, secure cart checkout, order logs, QR ticket validations, and loyalty benefits.",
-      "Dedicated portal for managers to configure schedules, rooms, prices, seats, and inventory items.",
-      "AI Cinema Assistant with streamed answers, vector policies, tool calling, and automated review moderation.",
+      "Architected a Microservices system using Spring Cloud and initialized the React/TypeScript frontend structure.",
+      "Built a seat-locking module using Redis and STOMP WebSocket, ensuring zero double-booking incidents under high load.",
+      "Implemented asynchronous multi-gateway payments (VNPay, MoMo) using Strategy Pattern and Kafka events.",
+      "Developed an Agentic RAG-based chatbot using Spring AI, Gemini, and pgvector for document retrieval and tool calling.",
     ],
     stack: [
       "Java",
@@ -136,12 +137,14 @@ export const projects: Project[] = [
       "Spring Cloud",
       "React",
       "TypeScript",
-      "Kafka",
-      "Redis",
       "MySQL",
-      "MongoDB",
       "PostgreSQL",
+      "MongoDB",
+      "Redis",
+      "Kafka",
       "Docker",
+      "Spring AI",
+      "WebSocket",
     ],
     architecture: [
       "Microservices split by domain (auth, booking, order, notification, AI).",
@@ -158,26 +161,30 @@ export const projects: Project[] = [
   },
   {
     name: "HotelLink",
-    role: "Full-stack Engineer",
+    role: "Full-stack Developer",
     status: "Featured System",
     summary:
-      "Hotel reservation and operational system covering online booking, guest stay details, invoice billing, and dashboard analytics.",
+      "Hotel Booking & Management System covering online booking, guest stay details, invoice billing, and dashboard analytics.",
     problem:
       "Hotel operations suffer from disjointed booking logs, billing systems, and guest operations.",
     features: [
-      "Guest reservation panel, secure check-in/out, invoicing, and service tracking.",
-      "Role-aware experience for guests, managers, and service desk staff.",
-      "Production-ready deployment scripts with auto-initializing SQL seeds.",
+      "Designed robust RESTful APIs following Layered Architecture and enforced RBAC via JWT and OAuth2.",
+      "Developed a responsive SPA dashboard using Redux Toolkit to seamlessly centralize and sync complex booking states.",
+      "Integrated VNPay/Momo for seamless transactions, Cloudinary for media, and SMTP for automated email notifications.",
+      "Automated CI/CD pipeline using GitHub Actions, Docker containerization, and AWS EC2 deployment with Nginx.",
     ],
     stack: [
-      "React",
+      "Java",
       "Spring Boot",
+      "Spring Security",
+      "React",
       "MariaDB",
+      "Nginx",
       "Docker",
       "GitHub Actions",
       "AWS EC2",
-      "Tailwind CSS",
       "Redux Toolkit",
+      "Tailwind CSS",
     ],
     architecture: [
       "Frontend & Backend decoupled with Docker Compose deployment orchestration.",
@@ -263,6 +270,7 @@ export const projects: Project[] = [
         href: "https://github.com/phamthanhtrivn",
       },
     ],
+    spotlight: true,
   },
   {
     name: "Restaurant Management",
