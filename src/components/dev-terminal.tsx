@@ -21,7 +21,10 @@ export function DevTerminal({ isOpen, onClose }: DevTerminalProps) {
   const [input, setInput] = useState("");
   const [history, setHistory] = useState<HistoryLine[]>([
     { type: "output", text: `Pham Thanh Tri CLI [Version 1.1.0]` },
-    { type: "output", text: `Type 'help' to see the list of available commands.` },
+    {
+      type: "output",
+      text: `Type 'help' to see the list of available commands.`,
+    },
     { type: "output", text: `` },
   ]);
   const [cmdHistory, setCmdHistory] = useState<string[]>([]);
@@ -61,7 +64,18 @@ export function DevTerminal({ isOpen, onClose }: DevTerminalProps) {
 
   if (!isOpen) return null;
 
-  const COMMANDS = ["help", "clear", "about", "skills", "projects", "contact", "theme", "linkedin", "email", "neofetch", "exit", "sudo"];
+  const COMMANDS = [
+    "help",
+    "clear",
+    "about",
+    "skills",
+    "projects",
+    "contact",
+    "theme",
+    "linkedin",
+    "email",
+    "exit",
+  ];
 
   const handleCommand = (rawCmd: string) => {
     const trimmed = rawCmd.trim();
@@ -81,16 +95,39 @@ export function DevTerminal({ isOpen, onClose }: DevTerminalProps) {
         setHistory((prev) => [
           ...prev,
           { type: "output", text: "Available commands:" },
-          { type: "output", text: "  about          - View professional biography" },
-          { type: "output", text: "  skills         - List specialized tech stack" },
-          { type: "output", text: "  projects       - Show portfolio projects & case studies" },
+          {
+            type: "output",
+            text: "  about          - View professional biography",
+          },
+          {
+            type: "output",
+            text: "  skills         - List specialized tech stack",
+          },
+          {
+            type: "output",
+            text: "  projects       - Show portfolio projects & case studies",
+          },
           { type: "output", text: "  contact        - Display contact notes" },
-          { type: "output", text: "  linkedin       - Open my LinkedIn profile" },
-          { type: "output", text: "  email          - Open a mail client to write to me" },
-          { type: "output", text: "  theme [l|d|t]  - Switch theme (light, dark, toggle)" },
-          { type: "output", text: "  neofetch       - Display dynamic system metrics" },
-          { type: "output", text: "  clear          - Clear terminal screen log" },
-          { type: "output", text: "  exit           - Close terminal interface" },
+          {
+            type: "output",
+            text: "  linkedin       - Open my LinkedIn profile",
+          },
+          {
+            type: "output",
+            text: "  email          - Open a mail client to write to me",
+          },
+          {
+            type: "output",
+            text: "  theme [l|d|t]  - Switch theme (light, dark, toggle)",
+          },
+          {
+            type: "output",
+            text: "  clear          - Clear terminal screen log",
+          },
+          {
+            type: "output",
+            text: "  exit           - Close terminal interface",
+          },
         ]);
         break;
 
@@ -117,10 +154,15 @@ export function DevTerminal({ isOpen, onClose }: DevTerminalProps) {
 
       case "skills":
         setHistory((prev) => {
-          const lines: HistoryLine[] = [{ type: "output", text: "Core Skill Matrix:" }];
+          const lines: HistoryLine[] = [
+            { type: "output", text: "Core Skill Matrix:" },
+          ];
           skillGroups.forEach((group) => {
             lines.push({ type: "output", text: `  [${group.title}]` });
-            lines.push({ type: "output", text: `    ${group.items.join(", ")}` });
+            lines.push({
+              type: "output",
+              text: `    ${group.items.join(", ")}`,
+            });
           });
           return [...prev, ...lines];
         });
@@ -128,11 +170,22 @@ export function DevTerminal({ isOpen, onClose }: DevTerminalProps) {
 
       case "projects":
         setHistory((prev) => {
-          const lines: HistoryLine[] = [{ type: "output", text: "Portfolio Project Index:" }];
+          const lines: HistoryLine[] = [
+            { type: "output", text: "Portfolio Project Index:" },
+          ];
           projects.forEach((proj) => {
-            lines.push({ type: "output", text: `  * ${proj.name} (${proj.role})` });
-            lines.push({ type: "output", text: `    Summary: ${proj.summary}` });
-            lines.push({ type: "output", text: `    Stack:   ${proj.stack.slice(0, 5).join(", ")}...` });
+            lines.push({
+              type: "output",
+              text: `  * ${proj.name} (${proj.role})`,
+            });
+            lines.push({
+              type: "output",
+              text: `    Summary: ${proj.summary}`,
+            });
+            lines.push({
+              type: "output",
+              text: `    Stack:   ${proj.stack.slice(0, 5).join(", ")}...`,
+            });
             lines.push({ type: "output", text: "" });
           });
           return [...prev, ...lines];
@@ -150,12 +203,21 @@ export function DevTerminal({ isOpen, onClose }: DevTerminalProps) {
         break;
 
       case "linkedin":
-        setHistory((prev) => [...prev, { type: "output", text: `Opening LinkedIn: ${profile.linkedin}` }]);
+        setHistory((prev) => [
+          ...prev,
+          { type: "output", text: `Opening LinkedIn: ${profile.linkedin}` },
+        ]);
         window.open(profile.linkedin, "_blank");
         break;
 
       case "email":
-        setHistory((prev) => [...prev, { type: "output", text: `Opening mailto link: mailto:${profile.email}` }]);
+        setHistory((prev) => [
+          ...prev,
+          {
+            type: "output",
+            text: `Opening mailto link: mailto:${profile.email}`,
+          },
+        ]);
         window.open(`mailto:${profile.email}`, "_self");
         break;
 
@@ -163,47 +225,38 @@ export function DevTerminal({ isOpen, onClose }: DevTerminalProps) {
         const sub = args[0]?.toLowerCase();
         if (sub === "light" || sub === "l") {
           setTheme("light");
-          setHistory((prev) => [...prev, { type: "output", text: "Theme set to Light." }]);
+          setHistory((prev) => [
+            ...prev,
+            { type: "output", text: "Theme set to Light." },
+          ]);
         } else if (sub === "dark" || sub === "d") {
           setTheme("dark");
-          setHistory((prev) => [...prev, { type: "output", text: "Theme set to Dark." }]);
+          setHistory((prev) => [
+            ...prev,
+            { type: "output", text: "Theme set to Dark." },
+          ]);
         } else if (sub === "toggle" || sub === "t" || !sub) {
           const newTheme = theme === "light" ? "dark" : "light";
           setTheme(newTheme);
-          setHistory((prev) => [...prev, { type: "output", text: `Theme toggled to ${newTheme}.` }]);
-        } else {
-          setHistory((prev) => [...prev, { type: "error", text: "Usage: theme [light | dark | toggle]" }]);
-        }
-        break;
-
-      case "neofetch":
-        setHistory((prev) => [
-          ...prev,
-          { type: "output", text: "     .---.         tri@portfolio" },
-          { type: "output", text: "    /     \\        OS: Next.js 16 (React 19)" },
-          { type: "output", text: "    \\  o  /        Host: Localhost:3000" },
-          { type: "output", text: "     `---'         Kernel: Tailwind CSS v4 (Blue Mode)" },
-          { type: "output", text: "    /  |  \\        Shell: Interactive React Terminal" },
-          { type: "output", text: "   /   |   \\       Fonts: Plus Jakarta Sans / Fira Code" },
-        ]);
-        break;
-
-      case "sudo":
-        if (args.join(" ") === "rm -rf /") {
           setHistory((prev) => [
             ...prev,
-            { type: "error", text: "sudo: rm -rf / is blocked in this sandbox!" },
-            { type: "output", text: "rm: cannot delete absolute root directory. Nice try though :)" },
+            { type: "output", text: `Theme toggled to ${newTheme}.` },
           ]);
         } else {
-          setHistory((prev) => [...prev, { type: "error", text: "sudo: Permission denied. Access token missing." }]);
+          setHistory((prev) => [
+            ...prev,
+            { type: "error", text: "Usage: theme [light | dark | toggle]" },
+          ]);
         }
         break;
 
       default:
         setHistory((prev) => [
           ...prev,
-          { type: "error", text: `Command not found: '${cmd}'. Type 'help' to show commands.` },
+          {
+            type: "error",
+            text: `Command not found: '${cmd}'. Type 'help' to show commands.`,
+          },
         ]);
         break;
     }
@@ -221,7 +274,8 @@ export function DevTerminal({ isOpen, onClose }: DevTerminalProps) {
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
       if (cmdHistory.length === 0) return;
-      const nextIdx = historyIdx === -1 ? cmdHistory.length - 1 : Math.max(0, historyIdx - 1);
+      const nextIdx =
+        historyIdx === -1 ? cmdHistory.length - 1 : Math.max(0, historyIdx - 1);
       setHistoryIdx(nextIdx);
       setInput(cmdHistory[nextIdx]);
     } else if (e.key === "ArrowDown") {
@@ -264,7 +318,9 @@ export function DevTerminal({ isOpen, onClose }: DevTerminalProps) {
               <span className="size-3 rounded-full bg-red-500/60" />
               <span className="size-3 rounded-full bg-yellow-500/60" />
               <span className="size-3 rounded-full bg-blue-500/60" />
-              <span className="ml-2 text-xs text-cyan-400/60">tri@portfolio:~</span>
+              <span className="ml-2 text-xs text-cyan-400/60">
+                tri@portfolio:~
+              </span>
             </div>
             <button
               onClick={onClose}
@@ -286,11 +342,13 @@ export function DevTerminal({ isOpen, onClose }: DevTerminalProps) {
                   line.type === "input"
                     ? "text-white"
                     : line.type === "error"
-                    ? "text-red-400"
-                    : "text-cyan-300"
+                      ? "text-red-400"
+                      : "text-cyan-300"
                 }
               >
-                {line.type === "input" && <span className="text-cyan-400 mr-2">$</span>}
+                {line.type === "input" && (
+                  <span className="text-cyan-400 mr-2">$</span>
+                )}
                 <span className="whitespace-pre-wrap">{line.text}</span>
               </div>
             ))}
